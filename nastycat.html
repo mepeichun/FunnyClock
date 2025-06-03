@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nasty Cat</title>
+  <style>
+    /* body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+    }
+     */
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start; /* 改为顶部对齐 */
+      min-height: 100vh;      /* 确保 body 至少占满整个视口高度 */
+      padding-top: 20px;      /* 增加顶部内边距，避免贴边 */
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      padding: 20px;
+      max-width: 800px;
+    }
+    
+    h1 {
+      color: white;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      margin-bottom: 10px;
+      font-size: 2.5rem;
+    }
+    
+    .subtitle {
+      color: #ffeb3b;
+      margin-bottom: 30px;
+      font-size: 1.2rem;
+    }
+    
+    .clock-container {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      margin: 0 auto;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      border-radius: 50%;
+      /* 移除 overflow: hidden */
+      background: #fff;
+    }
+
+    .clock-container img, .hand {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .clock-img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(1.36); 
+      max-width: 100%;
+      height: auto;
+    }
+    
+    .hand {
+      transform-origin: 50% 100%;
+    }
+    
+    .second-hand {
+      width: 3px;
+      height: 160px;
+      background: linear-gradient(to bottom, #ff0000 0%, #ff5252 100%);
+      border-radius: 2px;
+      z-index: 10;
+    }
+    
+    .minute-hand {
+      width: 4px;
+      height: 140px;
+      background: linear-gradient(to bottom, #333 0%, #666 100%);
+      border-radius: 3px;
+      z-index: 9;
+    }
+    
+    .hour-hand {
+      width: 6px;
+      height: 100px;
+      background: linear-gradient(to bottom, #000 0%, #444 100%);
+      border-radius: 4px;
+      z-index: 8;
+    }
+    
+    @keyframes hand-move {
+      0% { transform: translate(-50%, -50%) translateY(-25px) scale(1.36); }
+      85% { transform: translate(-50%, -50%) translateY(-8px) scale(1.36); }
+      100% { transform: translate(-50%, -50%) translateY(-25px) scale(1.36); }
+    }
+    
+    @keyframes egg-rotate {
+      0% { transform: translate(-50%, -50%) rotate(0deg) scale(1.36); }
+      85% { transform: translate(-50%, -50%) rotate(-45deg) scale(1.36); }
+      100% { transform: translate(-50%, -50%) rotate(0deg) scale(1.36); }
+    }
+    
+    .center-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      background: #ff0000;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      box-shadow: 0 0 10px rgba(255,0,0,0.7);
+    }
+    
+    .digital-clock {
+      position: absolute;
+      margin: 450px auto 0; /* 上边距 20px，水平居中 */
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 20px 20px;
+      border-radius: 30px;
+      font-size: 1.5rem;
+      font-family: 'Courier New', monospace;
+      width: fit-content; /* 宽度自适应内容 */
+      left: 50%;                /* 水平居中定位 */
+      transform: translateX(-50%); /* 修正居中偏移 */
+    }
+    
+    .instructions {
+      background: rgba(255,255,255,0.9);
+      padding: 20px;
+      border-radius: 15px;
+      margin-top: 30px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .instructions h3 {
+      margin-top: 0;
+      color: #2575fc;
+    }
+    
+    .instructions ul {
+      text-align: left;
+      padding-left: 20px;
+    }
+    
+    .instructions li {
+      margin-bottom: 10px;
+    }
+    
+    #hand1 {
+      z-index: 5;
+    }
+    
+    #egg {
+      z-index: 6;
+    }
+
+    #cathead {
+      z-index: 6;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-size: 0.8rem;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🐱 Cat Clock</h1>
+    <div class="subtitle">A whimsical clock with nasty cat animations</div>
+    
+    <div class="clock-container">
+      <img src="clock.png" alt="Clock" class="clock-img">
+      <img src="body.png" alt="Body" class="clock-img">
+      <img id="hand1" src="hand1.png" alt="Hand1" class="clock-img">
+      <img src="hand2.png" alt="Hand2" class="clock-img">
+      <img id="cathead" src="head.png" alt="Head" class="clock-img">
+      <img id="egg" src="egg.png" alt="Egg" class="clock-img">
+
+      <div id="hour" class="hand hour-hand"></div>
+      <div id="minute" class="hand minute-hand"></div>
+      <div id="second" class="hand second-hand"></div>
+      <div class="center-dot"></div>
+      <div class="digital-clock" id="digital">00:00:00</div>
+    </div>
+    
+  </div>
+
+  <script>
+    const hourHand = document.getElementById('hour');
+    const minuteHand = document.getElementById('minute');
+    const secondHand = document.getElementById('second');
+    const digitalClock = document.getElementById('digital');
+    
+    let prevSecond = -1;
+
+    function updateClock() {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const minutes = now.getMinutes();
+      const hours = now.getHours();
+      
+      // Format digital time
+      const h = hours.toString().padStart(2, '0');
+      const m = minutes.toString().padStart(2, '0');
+      const s = seconds.toString().padStart(2, '0');
+      digitalClock.textContent = `${h}:${m}:${s}`;
+
+      const secDeg = seconds * 6;
+      const minDeg = minutes * 6 + seconds * 0.1;
+      const hourDeg = ((hours % 12) + minutes / 60) * 30;
+
+      // Apply rotations with corrected transform origin
+      hourHand.style.transform = `translate(-50%, -100%) rotate(${hourDeg}deg)`;
+      minuteHand.style.transform = `translate(-50%, -100%) rotate(${minDeg}deg)`;
+      secondHand.style.transform = `translate(-50%, -100%) rotate(${secDeg}deg)`;
+      
+      const hand1 = document.getElementById('hand1');
+      const egg = document.getElementById('egg');
+
+      hand1.style.animation = 'hand-move 1s ease-in-out infinite';
+      egg.style.animation = 'egg-rotate 1s ease-in-out infinite';
+
+    }
+
+    // Initialize clock and set update interval
+    updateClock();
+    setInterval(updateClock, 1000);
+    
+    // Add mouse move effect for fun
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      document.body.style.background = `linear-gradient(${x * 180}deg, #6a11cb 0%, #2575fc 100%)`;
+    });
+
+  </script>
+
+<footer style="color: white; text-align: center; margin-top: 20px; font-size: 0.8rem;">
+  <p>DISCLAIMER: This page is purely for entertainment purposes only.</p>
+  <p>If you find any content offensive, I sincerely apologize - it was never my intention to upset anyone.</p>
+  <p>Just a silly cat clock having some fun!</p>
+</footer>
+</body>
+</html>
