@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Time-Chasing Stickman</title>
+  <style>
+    :root {
+      --clock-size: min(80vw, 400px);
+      --hand-minute-height: calc(var(--clock-size) * 0.35);
+      --hand-hour-height: calc(var(--clock-size) * 0.25);
+      --digital-clock-top: calc(var(--clock-size) + 40px);
+      --stickman-width: 280%; /* 火柴人宽度控制变量 */
+      --stickman-max-width: 300%; /* 火柴人最大宽度 */
+      --clock-bg-size: 100%; /* 时钟背景大小 */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 20px 10px;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+      touch-action: manipulation;
+    }
+
+    .container {
+      text-align: center;
+      padding: 20px;
+      max-width: 800px;
+      width: 100%;
+    }
+    
+    h1 {
+      color: white;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: 2px;
+      animation: titleGlow 2s infinite alternate;
+    }
+    
+    .clock-container {
+      position: relative;
+      width: var(--clock-size);
+      height: var(--clock-size);
+      margin: 0 auto;
+      margin-top: 120px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+      border-radius: 50%;
+      background: #f3f3f3;
+      border: 2px rgb(0, 0, 0)3;
+      background-size: var(--clock-bg-size);
+      background-position: center;
+      background-repeat: no-repeat;
+      overflow: visible; 
+    }
+
+    .clock-img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2.85); 
+      max-width: 100%;
+      height: auto;
+    }
+
+    .stickman {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: center center;
+      width: var(--stickman-width);
+      height: auto;
+      max-width: var(--stickman-max-width);
+      z-index: 100;
+      transition: transform 0.1s linear;
+      filter: drop-shadow(0 0 5px rgba(0,0,0,0.7));
+      transform-box: fill-box; /* 关键修改：确保旋转中心正确 */
+    }
+
+    .stickman-placeholder {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: calc(var(--stickman-max-width) * 1.2);
+      aspect-ratio: 1/1;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      visibility: hidden;
+    }
+    
+    .hand {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: 50% 100%;
+      z-index: 5;
+      border-radius: 5px;
+    }
+    
+    .minute-hand {
+      width: 4px;
+      height: var(--hand-minute-height);
+      background: linear-gradient(to top, #4a5568, #2d3748);
+      transform: translate(-50%, -100%) rotate(0deg);
+    }
+    
+    .hour-hand {
+      width: 8px;
+      height: var(--hand-hour-height);
+      background: linear-gradient(to top, #2d3748, #1a202c);
+      transform: translate(-50%, -100%) rotate(0deg);
+    }
+    
+    .center-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 16px;
+      height: 16px;
+      background: #ff5252;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      box-shadow: 0 0 15px rgba(255,82,82,0.8);
+    }
+    
+    .digital-clock {
+      position: absolute;
+      top: var(--digital-clock-top);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: #ffffff;
+      padding: 15px 30px;
+      border-radius: 30px;
+      margin-top: 100px;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: normal;
+      width: fit-content;
+      white-space: nowrap;
+      z-index: 5;
+      border: 2px solid #3b3b3b;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      backdrop-filter: blur(2px);
+    }
+    
+    @keyframes digitalPulse {
+      0% { box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+      100% { box-shadow: 0 5px 25px rgba(255, 140, 0, 0.6); }
+    }
+    
+    
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.6);
+      color: #ffffff;
+      text-align: center;
+      padding: 12px;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+      z-index: 100;
+      border-top: 1px solid #c9c9c9;
+      backdrop-filter: blur(3px);
+    }
+
+    /* 移动端优化 */
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .clock-container {
+        --clock-size: 90vw;
+        border-width: 3px;
+      }
+      
+      .digital-clock {
+        padding: 12px 25px;
+        font-size: 1.3rem;
+      }
+      
+      body {
+        padding-top: 10px;
+      }
+    }
+
+    /* 平板优化 */
+    @media (min-width: 481px) and (max-width: 768px) {
+      .clock-container {
+        --clock-size: 70vw;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Time-Chasing Stickman</h1>
+    
+    <div class="clock-container">
+      <div class="clock-img"></div>
+      <img src="./images/clock.png" alt="Clock" class="clock-img">
+      <div class="stickman-placeholder"></div>
+      <div id="stickman" class="stickman">
+        <!-- 火柴人将通过JS动态插入 -->
+      </div>
+      
+      <div id="minute" class="hand minute-hand"></div>
+      <div id="hour" class="hand hour-hand"></div>
+      <div class="center-dot"></div>
+      <div class="digital-clock" id="digital">00:00:00</div>
+    </div>
+
+  
+  <footer>
+    <p>The stickman keeps running—not to catch time, but to remind us that every second matters.</p>
+    <p>May this space offer you a moment to pause, to daydream, and to embrace the gentle rhythm of time.</p>
+  </footer>
+
+  <script>
+    const hourHand = document.getElementById('hour');
+    const minuteHand = document.getElementById('minute');
+    const digitalClock = document.getElementById('digital');
+    const stickmanContainer = document.getElementById('stickman');
+    
+    // 火柴人PNG图片数组
+    const stickmen = [
+      './imagesman1.png',
+      './imagesman2.png',
+      './imagesman3.png',
+      './imagesman4.png',
+      './imagesman5.png',
+      './imagesman6.png'
+    ];
+    
+    // 全局变量保存火柴人图片元素
+    let stickmanImg = null;
+    
+    // 预加载火柴人图片
+    function preloadImages() {
+      stickmen.forEach(imgSrc => {
+        const img = new Image();
+        img.src = imgSrc;
+      });
+    }
+    
+    // 获取当天0点的时间
+    function getStartOfDay(date) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+    
+    // 更新时钟
+    function updateClock() {
+      const now = new Date();
+      const startOfDay = getStartOfDay(now);
+      const totalMilliseconds = now.getTime() - startOfDay.getTime();
+      
+      // 计算角度（使用持续增加的角度值）
+      const secDeg = (totalMilliseconds / 1000) * 6;
+      const minDeg = (totalMilliseconds / (1000 * 60)) * 6;
+      const hourDeg = ((now.getHours() % 12) + now.getMinutes() / 60) * 30;
+      
+      // 格式化数字时钟
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+      const h = hours.toString().padStart(2, '0');
+      const m = minutes.toString().padStart(2, '0');
+      const s = seconds.toString().padStart(2, '0');
+      digitalClock.textContent = `${h}:${m}:${s}`;
+      
+      // 应用旋转
+      hourHand.style.transform = `translate(-50%, -100%) rotate(${hourDeg}deg)`;
+      minuteHand.style.transform = `translate(-50%, -100%) rotate(${minDeg}deg)`;
+      
+      // 计算当前秒内的位置（0-359）
+      const secPosition = Math.floor((seconds * 1000 + now.getMilliseconds()) / (1000/360));
+      
+      // 选择火柴人姿势（每60个位置使用一个姿势）
+      const stickmanIndex = Math.floor(secPosition / 60) % 6;
+      
+      // 更新火柴人
+      if (stickmanImg) {
+        stickmanImg.src = stickmen[stickmanIndex];
+      }
+      
+      // 计算火柴人旋转角度（使用持续增加的角度值）
+      stickmanContainer.style.transform = `translate(-50%, -50%) rotate(${secDeg}deg)`;
+    }
+    
+    // 初始化时钟
+    function initClock() {
+      // 预加载图片
+      preloadImages();
+      
+      // 创建火柴人图片元素
+      stickmanImg = document.createElement('img');
+      stickmanImg.alt = 'Stickman';
+      stickmanImg.style.width = '100%';
+      stickmanImg.style.height = 'auto';
+      stickmanContainer.appendChild(stickmanImg);
+      
+      // 关键修改：初始禁用过渡动画
+      stickmanContainer.style.transition = 'none';
+      
+      // 设置更新间隔（每秒更新60次以获得平滑动画）
+      setInterval(updateClock, 1000/60);
+      
+      // 初始更新
+      updateClock();
+      
+      // 关键修改：下一帧启用过渡动画
+      requestAnimationFrame(() => {
+        stickmanContainer.style.transition = 'transform 0.1s linear';
+      });
+    }
+    
+    // 页面加载完成后初始化
+    window.addEventListener('load', initClock);
+    
+    // 添加鼠标/触摸移动背景效果
+    function updateBackground(x, y) {
+      const bgAngle = (x / window.innerWidth) * 180;
+      document.body.style.background = `linear-gradient(${bgAngle}deg, #6a11cb 0%, #2575fc 100%)`;
+    }
+    
+    // 鼠标移动事件
+    document.addEventListener('mousemove', (e) => {
+      updateBackground(e.clientX, e.clientY);
+    });
+    
+    // 触摸移动事件
+    document.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (e.touches.length > 0) {
+        updateBackground(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: false });
+  </script>
+</body>
+</html>
