@@ -33,6 +33,19 @@
       touch-action: manipulation;
     }
 
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 18px;
+      text-decoration: none;
+      color: #ffffff;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      /* background: #5f03c2; */
+    }
+
     .container {
       text-align: center;
       padding: 20px;
@@ -207,6 +220,7 @@
   </style>
 </head>
 <body>
+  <a href="../" class="back-button">Back</a>
   <div class="container">
     <h1>Time-Chasing Stickman</h1>
     
@@ -226,6 +240,7 @@
 
   
   <footer>
+    <p>© 2025 Time-Chasing Stickman by Peichun Li</p>
     <p>The stickman keeps running—not to catch time, but to remind us that every second matters.</p>
     <p>May this space offer you a moment to pause, to daydream, and to embrace the gentle rhythm of time.</p>
   </footer>
@@ -238,12 +253,12 @@
     
     // 火柴人PNG图片数组
     const stickmen = [
-      './imagesman1.png',
-      './imagesman2.png',
-      './imagesman3.png',
-      './imagesman4.png',
-      './imagesman5.png',
-      './imagesman6.png'
+      './images/man1.png',
+      './images/man2.png',
+      './images/man3.png',
+      './images/man4.png',
+      './images/man5.png',
+      './images/man6.png'
     ];
     
     // 全局变量保存火柴人图片元素

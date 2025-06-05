@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock Zoo - 时光动物园</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bs-body-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --primary: #4361ee;
+            --light-bg: #f8f9fa;
+            --card-bg-light: rgba(255, 255, 255, 0.9);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: #212529;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand i {
+            color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        .btn-theme,
+        .btn-lang {
+            background: rgba(67, 97, 238, 0.1);
+            border: none;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .btn-theme:hover,
+        .btn-lang:hover {
+            background: rgba(67, 97, 238, 0.2);
+        }
+
+        /* Hero Section */
+        .hero-title {
+            font-weight: 700;
+            background: linear-gradient(to right, #4361ee, #3a0ca3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient-shift 8s infinite alternate;
+        }
+
+        .tagline {
+            font-weight: 300;
+            opacity: 0.9;
+            max-width: 800px;
+        }
+
+        /* Intro Cards */
+        .intro-card {
+            background: var(--card-bg-light);
+            border: none;
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .intro-card h2 {
+            color: var(--primary);
+        }
+
+        .highlight {
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .clock-card {
+            height: 100%;
+            border: none;
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: var(--card-bg-light);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .clock-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .clock-preview {
+            height: 200px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .center {
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        /* View Button */
+        .view-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn:hover {
+            background: #3a0ca3;
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg py-3" style="padding-bottom: 1rem!important;">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-clock me-2"></i>
+                <span class="lang-text">Clock Zoo</span>
+            </a>
+            <div class="d-flex">
+                <button class="btn btn-lang me-2 rounded-pill" onclick="toggleLanguage()">
+                    <i class="fas fa-globe me-1"></i>
+                    <span class="lang-text" id="language-btn">English</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-3">
+        <div class="container py-3" style="padding-top: 1rem!important;">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <h1 class="hero-title display-3 fw-bold mb-4" id="hero-title">时间是温柔、流动且鲜活的</h1>
+                    <p class="tagline lead mb-5" id="tagline">
+                        随着年岁的增长，我常常发现自己抓不住时间。谈起时间，总是与各种日期关联在一起，它可能是一种期盼、纪念或者等待，甚至可能会让人感到焦虑。在时光动物园，时间是温柔、流动且鲜活的。我设计了一些时钟，希望你可以放慢脚步，享受人生的每一刻。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clock Showcase Section -->
+    <section class="py-5 bg-light clock-gallery" style="padding-top: 0rem!important;">
+        <div class="container py-5" style="padding-top: 0rem!important;">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-lg-8">
+                    <h2 class="display-5 fw-bold mb-3" id="clock-showcase-title">时钟展示</h2>
+                    <div class="section-divider"></div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Clock Card 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="clock-card card">
+                        <div class="clock-preview card-img-top">
+                            <img src="./matrix-clock/screenshot.jpg" alt="Floral Bloom Clock" class="img-fluid" />
+                        </div>
+                        <div class="card-body">
+                            <h3 class="h5 card-title" id="clock1-title">时钟矩阵</h3>
+                            <p class="card-text" id="clock1-text">将多个模拟机械时钟整齐排列，得到一个数字时钟。</p>
+                            <a href="./matrix-clock/" class="btn view-btn rounded-pill" id="view-clock-btn1">查看</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clock Card 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="clock-card card">
+                        <div class="clock-preview card-img-top">
+                            <img src="./stickman/screenshot.jpg" alt="Floral Bloom Clock" class="img-fluid" />
+                        </div>
+                        <div class="card-body">
+                            <h3 class="h5 card-title" id="clock2-title">追时间的火柴人</h3>
+                            <p class="card-text" id="clock2-text">火柴人不停地追赶着每分每秒，TA前进的倒影落在表盘上...</p>
+                            <a href="./stickman/" class="btn view-btn rounded-pill" id="view-clock-btn2">查看</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clock Card 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="clock-card card">
+                        <div class="clock-preview card-img-top">
+                            <img src="./naughty-cat/screenshot.jpg" alt="Floral Bloom Clock" class="img-fluid" />
+                        </div>
+                        <div class="card-body">
+                            <h3 class="h5 card-title" id="clock3-title">捣蛋猫时钟</h3>
+                            <p class="card-text" id="clock3-text">这是一个很搞怪的时钟，甚至有点变态</p>
+                            <a href="./naughty-cat/" class="btn view-btn rounded-pill" id="view-clock-btn3">查看</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- More clock cards can be added here -->
+                <!-- Clock Card 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="clock-card card">
+                        <div class="clock-preview card-img-top">
+                            <!-- <img src="your-image-path.png" alt="Floral Bloom Clock" class="img-fluid" /> -->
+                        </div>
+                        <div class="card-body">
+                            <h3 class="h5 card-title" id="clock4-title">持续更新中</h3>
+                            <p class="card-text" id="clock4-text">科研闲暇时间，随缘更新</p>
+                            <a href="#" class="btn view-btn rounded-pill" id="view-clock-btn4">耐心等一等</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 text-center">
+        <div class="container">
+            <p class="mb-1" id="footer-text">时光动物园 &copy; 2025 | <a href="https://mepeichun.github.io/"
+                    target="_blank">访问作者主页</a></p>
+            <p class="mb-0" id="footer-creator">希望我们都能抓住人生中的每分每秒<i class="fas fa-heart text-danger"></i></p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const cn = {
+            "hero-title": "时间是温柔、流动且鲜活的",
+            "tagline": "随着年岁的增长，我常常发现自己抓不住时间。谈起时间，总是与各种日期关联在一切——它可能是一种期盼、纪念或者等待，也可能会制造焦虑。在时光动物园，时间是温柔、流动且鲜活的。我设计了一些时钟，希望你可以放慢脚步，享受人生的每一刻。",
+            "clock-showcase-title": "时钟展示",
+            "clock1-title": "时钟矩阵",
+            "clock1-text": "将多个模拟机械时钟整齐排列，得到一个数字时钟。",
+            "clock2-title": "追时间的火柴人",
+            "clock2-text": "火柴人不停地追赶着每分每秒，TA前进的倒影落在表盘上...",
+            "clock3-title": "捣蛋猫时钟",
+            "clock3-text": "这是一个很搞怪的时钟，甚至有点变态",
+            "clock4-title": "持续更新中",
+            "clock4-text": "科研闲暇时间，随缘更新",
+            "view-clock-btn1": "查看",
+            "view-clock-btn2": "查看",
+            "view-clock-btn3": "查看",
+            "view-clock-btn4": "耐心等一等",
+            "footer-text": "时间动物园 &copy; 2025 | <a href=\"https://mepeichun.github.io/\" target=\"_blank\">访问作者主页</a>",
+            "footer-creator": "希望我们都能抓住人生中的每分每秒<i class=\"fas fa-heart text-danger\"></i>"
+        };
+        const en = {
+            "hero-title": "Time is Gentle, Flowing, and Alive",
+            "tagline": "As the years pass, I often find myself unable to hold onto time. When time is mentioned, it is always tied to various dates—it could be anticipation, remembrance, or waiting, yet it can also stir anxiety. In the Time Zoo, time is gentle, flowing, and alive. I have designed a series of clocks, hoping they will inspire you to slow down and savor every moment of life.",
+            "clock-showcase-title": "Gallery of Clocks",
+            "clock1-title": "Clock Matrix",
+            "clock1-text": "Arranging multiple simulated mechanical clocks neatly results in a digital clock.",
+            "clock2-title": "Time-Chasing Stickman",
+            "clock2-text": "The stickman is relentlessly chasing every minute and second, and its reflection falls on the clock face...",
+            "clock3-title": "Naughty Cat Clock",
+            "clock3-text": "This is a quirky clock, even a bit absurd.",
+            "clock4-title": "Updating Continuously",
+            "clock4-text": "In the leisure time of research, updated at random intervals.",
+            "view-clock-btn1": "View",
+            "view-clock-btn2": "View",
+            "view-clock-btn3": "View",
+            "view-clock-btn4": "Wait patiently",
+            "footer-text": "Time Zoo &copy; 2025 | <a href=\"https://mepeichun.github.io/\" target=\"_blank\">Visit the Author's Homepage</a>",
+            "footer-creator": "Hope we can all seize every moment of life <i class=\"fas fa-heart text-danger\"></i>"
+        };
+
+        let currentLanguage = 'cn'; // 默认是英文
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'cn' : 'en'; // 切换语言
+            const lang = currentLanguage === 'cn' ? cn : en;
+
+            // 更新页面内容
+            Object.keys(lang).forEach(id => {
+                document.getElementById(id).innerHTML = lang[id];
+            });
+
+            // 更新按钮文本
+            document.getElementById('language-btn').innerHTML = currentLanguage === 'cn' ? 'English' : '中文';
+        }
+    </script>
+</body>
+
+</html>
