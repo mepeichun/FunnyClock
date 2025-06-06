@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,7 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             display: flex;
             justify-content: center;
@@ -22,7 +23,7 @@
             transition: background 1s ease;
             color: #fff;
         }
-        
+
         .container {
             width: 100%;
             max-width: 1000px;
@@ -34,36 +35,40 @@
             backdrop-filter: blur(10px);
             text-align: center;
         }
-        
+
         h1 {
             font-size: 2.8rem;
             margin-bottom: 10px;
             background: linear-gradient(90deg, #ff9966, #ff5e62);
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        
+
         .subtitle {
             font-size: 1.2rem;
             margin-bottom: 30px;
             opacity: 0.8;
         }
-        
+
         .input-section {
             margin: 25px 0;
             display: flex;
-            flex-wrap: wrap; /* 允许换行 */
-            gap: 10px; /* 同时设置行和列间距 */
-            align-items: center; /* 垂直居中 */
-            justify-content: center; /* 水平居中 */
+            flex-wrap: wrap;
+            /* 允许换行 */
+            gap: 10px;
+            /* 同时设置行和列间距 */
+            align-items: center;
+            /* 垂直居中 */
+            justify-content: center;
+            /* 水平居中 */
         }
-        
+
         .input-section label {
             font-size: 1.2rem;
             margin-right: 15px;
         }
-        
+
         .input-section input {
             padding: 10px 20px;
             font-size: 1.0rem;
@@ -75,7 +80,7 @@
             text-align: center;
             outline: none;
         }
-        
+
         .input-section button {
             padding: 10px 20px;
             font-size: 1.0rem;
@@ -88,22 +93,33 @@
             transition: transform 0.3s, box-shadow 0.3s;
             font-weight: 600;
         }
-        
+
         .input-section button:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(255, 94, 98, 0.4);
         }
-        
+
         .clock-container {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: 100%;
+            /* 改为百分比 */
+            max-width: 300px;
+            /* 设置最大尺寸 */
+            aspect-ratio: 1/1;
+            /* 保持宽高比1:1 */
             margin: 50px auto;
+            display: flex;
+            /* 使用flex布局 */
+            justify-content: center;
+            /* 水平居中 */
+            /* padding: 0 20px;  */
         }
-        
+
         .clock-face {
             width: 90%;
+            /* 调整为90%宽度，留出两侧空白 */
             height: 90%;
+            /* 保持高度与宽度一致 */
             background-size: cover;
             background: rgb(240, 240, 240);
             border-radius: 50%;
@@ -115,11 +131,34 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(1.12); 
+            transform: translate(-50%, -50%) scale(1.12);
+            /* 调整缩放比例 */
             max-width: 100%;
             height: auto;
         }
-        
+
+        .left-text,
+        .right-text {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            /* 与padding一致 */
+            color: white;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .left-text {
+            left: 0;
+        }
+
+        .right-text {
+            right: 0;
+        }
+
         .clock-center {
             position: absolute;
             width: 15px;
@@ -132,7 +171,7 @@
             z-index: 10;
             /* box-shadow: 0 0 10px rgba(255, 94, 98, 0.8); */
         }
-        
+
         .hand {
             position: absolute;
             transform-origin: bottom center;
@@ -141,21 +180,21 @@
             transform: translateX(-50%);
             border-radius: 10px;
         }
-        
+
         .hour-hand {
             width: 9px;
             height: 70px;
             background: linear-gradient(to top, #858585, #000000);
             z-index: 3;
         }
-        
+
         .minute-hand {
             width: 5px;
             height: 100px;
             background: linear-gradient(to top, #c4c4c4, #313131);
             z-index: 2;
         }
-        
+
         .clock-markers {
             position: absolute;
             width: 100%;
@@ -163,7 +202,7 @@
             top: 0;
             left: 0;
         }
-        
+
         .inner-marker {
             position: absolute;
             font-size: 1.2rem;
@@ -172,7 +211,7 @@
             /* text-shadow: 0 0 10px rgba(0, 0, 0, 0.7); */
             transform: translate(-50%, -50%);
         }
-        
+
         .year-marker {
             position: absolute;
             font-size: 1.1rem;
@@ -180,7 +219,7 @@
             transform: translate(-50%, -50%);
             opacity: 0;
         }
-        
+
         .quote-container {
             max-width: 700px;
             margin: 30px auto;
@@ -194,7 +233,7 @@
             align-items: center;
             transition: all 0.5s ease;
         }
-        
+
         .quote {
             font-size: 1.2rem;
             line-height: 1.2;
@@ -202,7 +241,7 @@
             text-align: center;
             opacity: 0;
         }
-        
+
         .time-period {
             font-size: 1.2rem;
             color: #ff9966;
@@ -210,18 +249,25 @@
             margin-top: 5px;
             opacity: 0;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .info {
             margin-top: 20px;
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.6);
         }
-        
+
         .digital-clock {
             font-size: 1.5rem;
             margin: 20px 0;
@@ -229,21 +275,29 @@
             letter-spacing: 2px;
             color: #00c9ff;
         }
-        
+
         @media (max-width: 600px) {
             .clock-container {
-                width: 300px;
-                height: 300px;
+                width: 230px;
+                height: 230px;
             }
-            
+
+            .hour-hand {
+                height: 50px;
+            }
+
+            .minute-hand {
+                height: 70px;
+            }
+
             h1 {
                 font-size: 2.2rem;
             }
-            
+
             .quote {
                 font-size: 1.2rem;
             }
-            
+
             .digital-clock {
                 font-size: 1.2rem;
                 margin-bottom: 1.2rem;
@@ -251,19 +305,20 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>人生时钟</h1>
         <p class="subtitle">将80年的人生映射到24小时</p>
-        
+
         <div class="input-section">
             <label for="birth-year">出生年份：</label>
             <input type="number" id="birth-year" min="1900" max="2025" value="2000">
             <button id="calculate-btn">计算人生时钟</button>
         </div>
-        
+
         <div class="digital-clock" id="digital-clock">人生时钟：00:00:00.000.000</div>
-        
+
         <div class="clock-container">
             <div class="clock-face">
                 <!-- 表盘由CSS背景图实现 -->
@@ -275,32 +330,32 @@
                     <div class="inner-marker" style="top: 50%; left: 90%;">3</div>
                     <div class="inner-marker" style="top: 90%; left: 50%;">6</div>
                     <div class="inner-marker" style="top: 50%; left: 10%;">9</div>
-                    
+
                     <!-- 外侧年份标记 -->
                     <div class="year-marker" style="top: -5%; left: 50%;"></div>
-                    <div class="year-marker" style="top: 50%; left: 108%;"></div>
+                    <div class="year-marker right-text" style="top: 50%; left: 110%;"></div>
                     <div class="year-marker" style="top: 105%; left: 50%;"></div>
-                    <div class="year-marker" style="top: 50%; left: -10%;"></div>
+                    <div class="year-marker left-text" style="top: 50%; left: -15%;"></div>
                 </div>
-                
+
                 <!-- 时钟指针 -->
                 <div class="hand hour-hand"></div>
                 <div class="hand minute-hand"></div>
                 <div class="clock-center"></div>
             </div>
         </div>
-        
+
         <div class="quote-container">
             <div class="quote" id="quote1"></div>
             <div class="quote" id="quote2"></div>
             <div class="time-period" id="time-period"></div>
         </div>
-        
+
         <p class="info">假设人生有80年，将80年映射到24小时，人生时钟与真实时间之间的换算：1小时=3.33年，1分针=20.27天，1秒=8.11小时，1毫秒=29.2秒</p>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // 获取DOM元素
             const birthYearInput = document.getElementById('birth-year');
             const calculateBtn = document.getElementById('calculate-btn');
@@ -315,7 +370,7 @@
 
             // 获取当前年份
             const currentYear = new Date().getFullYear();
-            
+
             // 设置max属性为当前年份
             document.getElementById('birth-year').max = currentYear;
 
@@ -332,7 +387,7 @@
                     marker.style.opacity = 1;
                 });
             }
-            
+
             // 人生阶段文案
             const lifeQuotes = {
                 "深夜": {
@@ -504,7 +559,7 @@
                     period: "午夜 (23:00-24:00)"
                 }
             };
-            
+
             // 时间区间对应的背景色
             const timeColors = {
                 "深夜": "linear-gradient(135deg, #0f0c29, #302b63, #24243e)",
@@ -532,7 +587,7 @@
                 "午夜前": "linear-gradient(135deg, #000428, #004e92, #000428)",
                 "午夜": "linear-gradient(135deg, #0f0c29, #302b63, #24243e)"
             };
-            
+
             // 获取当前人生阶段
             function getLifePeriod(hour) {
                 if (hour >= 0 && hour < 1) return "深夜";
@@ -560,41 +615,41 @@
                 if (hour >= 22 && hour < 23) return "午夜前";
                 return "午夜";
             }
-            
+
             // 更新文案和背景色
             function updateQuotesAndBackground(hour) {
                 const period = getLifePeriod(hour);
-                
+
                 // 淡出效果
                 quote1.style.opacity = 0;
                 quote2.style.opacity = 0;
                 timePeriod.style.opacity = 0;
-                
+
                 setTimeout(() => {
                     quote1.textContent = lifeQuotes[period].quotes[0];
                     quote2.textContent = lifeQuotes[period].quotes[1];
                     timePeriod.textContent = lifeQuotes[period].period;
-                    
+
                     // 淡入效果
                     quote1.style.opacity = 1;
                     quote2.style.opacity = 1;
                     timePeriod.style.opacity = 1;
-                    
+
                     // 更新背景色
                     body.style.background = timeColors[period];
                 }, 300);
             }
-            
+
             // 格式化时间为两位数
             function formatTime(num) {
                 return num < 10 ? '0' + num : num;
             }
-            
+
             // 格式化毫秒为三位数
             function formatMilliseconds(num) {
                 return num < 10 ? '00' + num : (num < 100 ? '0' + num : num);
             }
-            
+
             // 更新电子时钟
             function updateDigitalClock(lifeHours) {
                 const hours = Math.floor(lifeHours);
@@ -602,98 +657,98 @@
                 const seconds = Math.floor((((lifeHours - hours) * 60 - minutes) * 60));
                 const milliseconds = Math.floor((((lifeHours - hours) * 60 - minutes) * 60 - seconds) * 1000);
                 const microseconds = Math.floor(((((lifeHours - hours) * 60 - minutes) * 60 - seconds) * 1000 - milliseconds) * 1000);
-                
+
                 digitalClock.textContent = `人生时钟：${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}.${formatMilliseconds(milliseconds)}.${formatMilliseconds(microseconds)}`;
             }
-            
+
             // 计算年龄（假设生日是当年6月1日）
             function calculateAge(birthYear) {
                 const now = new Date();
                 const currentYear = now.getFullYear();
                 const birthdayThisYear = new Date(currentYear, 5, 1); // 6月1日
-                
+
                 let age = currentYear - birthYear;
-                
+
                 // 如果当前日期在生日之前，年龄减1
                 if (now < birthdayThisYear) {
                     age--;
                 }
-                
+
                 // 计算从今年生日到现在的天数比例
                 const startDate = new Date(currentYear - 1, 5, 1); // 去年生日
                 const endDate = new Date(currentYear, 5, 1); // 今年生日
                 const daysInYear = (endDate - startDate) / (1000 * 60 * 60 * 24);
                 const daysSinceBirthday = (now - birthdayThisYear) / (1000 * 60 * 60 * 24);
-                
+
                 // 计算精确年龄（年 + 天数比例）
                 const exactAge = age + Math.max(0, daysSinceBirthday / daysInYear);
-                
+
                 return exactAge;
             }
-            
+
             // 更新时钟
             function updateClock(birthYear) {
                 const exactAge = calculateAge(birthYear);
-                
+
                 // 假设人生80年对应24小时
                 const lifeHours = (exactAge / 80) * 24;
                 const hours = Math.floor(lifeHours);
                 const minutes = Math.floor((lifeHours - hours) * 60);
                 const seconds = Math.floor((((lifeHours - hours) * 60 - minutes) * 60));
                 const milliseconds = Math.floor((((lifeHours - hours) * 60 - minutes) * 60 - seconds) * 1000);
-                
+
                 // 计算指针角度
                 const hourDeg = (hours % 12) * 30 + minutes * 0.5;
                 const minuteDeg = minutes * 6 + seconds * 0.1;
-                
+
                 // 应用旋转
                 hourHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
                 minuteHand.style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
-                
+
                 // 更新电子时钟
                 updateDigitalClock(lifeHours);
-                
+
                 // 更新文案和背景
                 updateQuotesAndBackground(lifeHours);
             }
-            
+
             // 缓慢移动时钟指针
             function startClockAnimation(birthYear) {
                 // 清除之前的定时器
                 if (window.clockInterval) {
                     clearInterval(window.clockInterval);
                 }
-                
+
                 // 设置新定时器（每毫秒更新一次以实现毫秒级变化）
                 window.clockInterval = setInterval(() => {
                     updateClock(birthYear);
                 }, 1);
-                
+
                 // 初始更新
                 updateClock(birthYear);
             }
-            
+
             // 按钮点击事件
-            calculateBtn.addEventListener('click', function() {
+            calculateBtn.addEventListener('click', function () {
                 const birthYear = parseInt(birthYearInput.value);
                 const currentYear = new Date().getFullYear();
                 if (isNaN(birthYear) || birthYear < 1900 || birthYear > currentYear) {
                     alert(`请输入有效的出生年份（1900-${currentYear}）`);
                     return;
                 }
-                
+
                 // 更新年份标记
                 setYearMarkers(birthYear);
-                
+
                 // 开始时钟动画
                 startClockAnimation(birthYear);
-                
+
                 // 显示文案
                 quote1.style.animation = "fadeIn 1.5s forwards";
                 quote2.style.animation = "fadeIn 1.5s forwards";
                 timePeriod.style.animation = "fadeIn 1.5s forwards";
             });
-            
+
             // 初始状态：不显示文案和年份标记
             quote1.style.opacity = 0;
             quote2.style.opacity = 0;
@@ -701,11 +756,12 @@
             yearMarkers.forEach(marker => {
                 marker.style.opacity = 0;
             });
-            
+
             // 初始时钟位置（0点0分）
             hourHand.style.transform = `translateX(-50%) rotate(0deg)`;
             minuteHand.style.transform = `translateX(-50%) rotate(0deg)`;
         });
     </script>
 </body>
+
 </html>
