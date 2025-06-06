@@ -28,7 +28,8 @@
             max-width: 1000px;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 20px;
-            padding: 30px;
+            padding: 70px;
+            padding-left: 80px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
             text-align: center;
@@ -51,6 +52,11 @@
         
         .input-section {
             margin: 25px 0;
+            display: flex;
+            flex-wrap: wrap; /* 允许换行 */
+            gap: 10px; /* 同时设置行和列间距 */
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
         }
         
         .input-section label {
@@ -78,7 +84,7 @@
             border-radius: 50px;
             color: white;
             cursor: pointer;
-            margin-left: 15px;
+            margin-top: auto;
             transition: transform 0.3s, box-shadow 0.3s;
             font-weight: 600;
         }
@@ -96,8 +102,8 @@
         }
         
         .clock-face {
-            width: 100%;
-            height: 100%;
+            width: 90%;
+            height: 90%;
             background-size: cover;
             background: rgb(240, 240, 240);
             border-radius: 50%;
@@ -272,9 +278,9 @@
                     
                     <!-- 外侧年份标记 -->
                     <div class="year-marker" style="top: -5%; left: 50%;"></div>
-                    <div class="year-marker" style="top: 50%; left: 115%;"></div>
+                    <div class="year-marker" style="top: 50%; left: 108%;"></div>
                     <div class="year-marker" style="top: 105%; left: 50%;"></div>
-                    <div class="year-marker" style="top: 50%; left: -15%;"></div>
+                    <div class="year-marker" style="top: 50%; left: -10%;"></div>
                 </div>
                 
                 <!-- 时钟指针 -->
@@ -316,10 +322,11 @@
             // 设置年份标记
             function setYearMarkers(birthYear) {
                 yearMarkers[0].textContent = `${birthYear + 40}/${birthYear + 80}`;  // 12点
-                yearMarkers[1].textContent = `${birthYear + 10}/${birthYear + 50}`;  // 3点
+                yearMarkers[1].textContent = `  ${birthYear + 10}/\n${birthYear + 50}`;  // 3点
                 yearMarkers[2].textContent = `${birthYear + 20}/${birthYear + 60}`;  // 6点
-                yearMarkers[3].textContent = `${birthYear + 30}/${birthYear + 70}`;  // 9点
-                
+                yearMarkers[3].textContent = `  ${birthYear + 30}/\n${birthYear + 70}`;  // 9点
+                yearMarkers[1].style.whiteSpace = "pre";
+                yearMarkers[3].style.whiteSpace = "pre";
                 // 显示年份标记
                 yearMarkers.forEach(marker => {
                     marker.style.opacity = 1;
