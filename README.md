@@ -21,6 +21,7 @@ You can try out the clocks here:
 - [Clock Matrix](https://mepeichun.github.io/clock-zoo/matrix-clock/)
 - [Time-Chasing Stickman](https://mepeichun.github.io/clock-zoo/stickman/)
 - [Naughty Cat Clock](https://mepeichun.github.io/clock-zoo/naughty-cat/)
+- [Lifetime Clock (Chinese Version Only)](https://mepeichun.github.io/clock-zoo/life-clock/)
 - [More updates coming soon](#)
 
 
