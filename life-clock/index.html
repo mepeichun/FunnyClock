@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人生时钟 - 生命中的每一刻</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            padding: 20px;
+            transition: background 1s ease;
+            color: #fff;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff9966, #ff5e62);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+        
+        .input-section {
+            margin: 25px 0;
+        }
+        
+        .input-section label {
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+        
+        .input-section input {
+            padding: 10px 20px;
+            font-size: 1.0rem;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            width: 150px;
+            text-align: center;
+            outline: none;
+        }
+        
+        .input-section button {
+            padding: 10px 20px;
+            font-size: 1.0rem;
+            background: linear-gradient(90deg, #ff9966, #ff5e62);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+        }
+        
+        .input-section button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 94, 98, 0.4);
+        }
+        
+        .clock-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 50px auto;
+        }
+        
+        .clock-face {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background: rgb(240, 240, 240);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .clock-img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1.12); 
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .clock-center {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #ff2e31;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            /* box-shadow: 0 0 10px rgba(255, 94, 98, 0.8); */
+        }
+        
+        .hand {
+            position: absolute;
+            transform-origin: bottom center;
+            left: 50%;
+            bottom: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+        
+        .hour-hand {
+            width: 9px;
+            height: 70px;
+            background: linear-gradient(to top, #858585, #000000);
+            z-index: 3;
+        }
+        
+        .minute-hand {
+            width: 5px;
+            height: 100px;
+            background: linear-gradient(to top, #c4c4c4, #313131);
+            z-index: 2;
+        }
+        
+        .clock-markers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        
+        .inner-marker {
+            position: absolute;
+            font-size: 1.2rem;
+            font-weight: normal;
+            color: rgb(31, 31, 31);
+            /* text-shadow: 0 0 10px rgba(0, 0, 0, 0.7); */
+            transform: translate(-50%, -50%);
+        }
+        
+        .year-marker {
+            position: absolute;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            transform: translate(-50%, -50%);
+            opacity: 0;
+        }
+        
+        .quote-container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s ease;
+        }
+        
+        .quote {
+            font-size: 1.2rem;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            text-align: center;
+            opacity: 0;
+        }
+        
+        .time-period {
+            font-size: 1.2rem;
+            color: #ff9966;
+            font-weight: 600;
+            margin-top: 5px;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .info {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .digital-clock {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            letter-spacing: 2px;
+            color: #00c9ff;
+        }
+        
+        @media (max-width: 600px) {
+            .clock-container {
+                width: 300px;
+                height: 300px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .quote {
+                font-size: 1.2rem;
+            }
+            
+            .digital-clock {
+                font-size: 1.2rem;
+                margin-bottom: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>人生时钟</h1>
+        <p class="subtitle">将80年的人生映射到24小时</p>
+        
+        <div class="input-section">
+            <label for="birth-year">出生年份：</label>
+            <input type="number" id="birth-year" min="1900" max="2025" value="2000">
+            <button id="calculate-btn">计算人生时钟</button>
+        </div>
+        
+        <div class="digital-clock" id="digital-clock">人生时钟：00:00:00.000.000</div>
+        
+        <div class="clock-container">
+            <div class="clock-face">
+                <!-- 表盘由CSS背景图实现 -->
+                <div class="clock-markers">
+                    <div class="clock-img"></div>
+                    <img src="clock.png" alt="Clock" class="clock-img">
+                    <!-- 内侧数字标记 -->
+                    <div class="inner-marker" style="top: 10%; left: 50%;">12</div>
+                    <div class="inner-marker" style="top: 50%; left: 90%;">3</div>
+                    <div class="inner-marker" style="top: 90%; left: 50%;">6</div>
+                    <div class="inner-marker" style="top: 50%; left: 10%;">9</div>
+                    
+                    <!-- 外侧年份标记 -->
+                    <div class="year-marker" style="top: -5%; left: 50%;"></div>
+                    <div class="year-marker" style="top: 50%; left: 115%;"></div>
+                    <div class="year-marker" style="top: 105%; left: 50%;"></div>
+                    <div class="year-marker" style="top: 50%; left: -15%;"></div>
+                </div>
+                
+                <!-- 时钟指针 -->
+                <div class="hand hour-hand"></div>
+                <div class="hand minute-hand"></div>
+                <div class="clock-center"></div>
+            </div>
+        </div>
+        
+        <div class="quote-container">
+            <div class="quote" id="quote1"></div>
+            <div class="quote" id="quote2"></div>
+            <div class="time-period" id="time-period"></div>
+        </div>
+        
+        <p class="info">假设人生有80年，将80年映射到24小时，人生时钟与真实时间之间的换算：1小时=3.33年，1分针=20.27天，1秒=8.11小时，1毫秒=29.2秒</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const birthYearInput = document.getElementById('birth-year');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const hourHand = document.querySelector('.hour-hand');
+            const minuteHand = document.querySelector('.minute-hand');
+            const body = document.body;
+            const quote1 = document.getElementById('quote1');
+            const quote2 = document.getElementById('quote2');
+            const timePeriod = document.getElementById('time-period');
+            const digitalClock = document.getElementById('digital-clock');
+            const yearMarkers = document.querySelectorAll('.year-marker');
+
+            // 获取当前年份
+            const currentYear = new Date().getFullYear();
+            
+            // 设置max属性为当前年份
+            document.getElementById('birth-year').max = currentYear;
+
+            // 设置年份标记
+            function setYearMarkers(birthYear) {
+                yearMarkers[0].textContent = `${birthYear + 40}/${birthYear + 80}`;  // 12点
+                yearMarkers[1].textContent = `${birthYear + 10}/${birthYear + 50}`;  // 3点
+                yearMarkers[2].textContent = `${birthYear + 20}/${birthYear + 60}`;  // 6点
+                yearMarkers[3].textContent = `${birthYear + 30}/${birthYear + 70}`;  // 9点
+                
+                // 显示年份标记
+                yearMarkers.forEach(marker => {
+                    marker.style.opacity = 1;
+                });
+            }
+            
+            // 人生阶段文案
+            const lifeQuotes = {
+                "深夜": {
+                    quotes: [
+                        "新的一天从此刻开始，黑暗中蕴藏无限可能",
+                        "但闭上双眼做个美梦，也是生命的馈赠"
+                    ],
+                    period: "深夜 (0:00-1:00)"
+                },
+                "凌晨": {
+                    quotes: [
+                        "这是专注的黄金时刻，全世界都是你的书房",
+                        "不过让思绪随星河流淌，享受片刻安宁也很好"
+                    ],
+                    period: "凌晨 (1:00-2:00)"
+                },
+                "破晓前": {
+                    quotes: [
+                        "在寂静中蓄力的人，终将迎接第一缕晨光",
+                        "枕着未完成的计划入眠，明天依然充满希望"
+                    ],
+                    period: "破晓前 (2:00-3:00)"
+                },
+                "黎明前夕": {
+                    quotes: [
+                        "夜航船即将靠岸，坚持是照亮航程的灯塔",
+                        "不妨暂泊港湾养精蓄锐，朝阳会等你启程"
+                    ],
+                    period: "黎明前夕 (3:00-4:00)"
+                },
+                "拂晓": {
+                    quotes: [
+                        "晨风已吹散薄雾，正是整装待发的好时机",
+                        "被窝里的温暖时光，是生活温柔的缓冲带"
+                    ],
+                    period: "拂晓 (4:00-5:00)"
+                },
+                "日出": {
+                    quotes: [
+                        "金辉洒满人生跑道，此刻出发永远不晚",
+                        "泡杯热茶静待朝阳，慢节奏也有力量"
+                    ],
+                    period: "日出 (5:00-6:00)"
+                },
+                "清晨": {
+                    quotes: [
+                        "早餐的香气里藏着一天的好心情",
+                        "让闹钟多响十分钟，慵懒是晨光的特权"
+                    ],
+                    period: "清晨 (6:00-7:00)"
+                },
+                "早晨": {
+                    quotes: [
+                        "通勤路上的人群中，藏着改变世界的野心",
+                        "如果晨露打湿了鞋尖，不妨哼着歌慢慢走"
+                    ],
+                    period: "早晨 (7:00-8:00)"
+                },
+                "上午1": {
+                    quotes: [
+                        "办公桌是今天的战场，每个决定都掷地有声",
+                        "记得给窗边的绿植浇水，暂停是为了更好生长"
+                    ],
+                    period: "上午 (8:00-9:00)"
+                },
+                "上午2": {
+                    quotes: [
+                        "灵感像跳跃的咖啡香，抓住它创造奇迹",
+                        "起身冲杯蜂蜜水吧，短暂的甜味抚慰心神"
+                    ],
+                    period: "上午 (9:00-10:00)"
+                },
+                "上午3": {
+                    quotes: [
+                        "阳光穿透玻璃的刻度，丈量着你向上的轨迹",
+                        "拆包饼干补充能量，小憩是智慧的充电站"
+                    ],
+                    period: "上午 (10:00-11:00)"
+                },
+                "午前": {
+                    quotes: [
+                        "距离巅峰只差一步，全力冲刺前的深呼吸",
+                        "闻着厨房飘来的饭香，期待本身就是幸福"
+                    ],
+                    period: "午前 (11:00-12:00)"
+                },
+                "正午": {
+                    quotes: [
+                        "烈日当空的时刻，每一步都踏出耀眼火花",
+                        "树荫下的便当时间，让味蕾替心灵放假"
+                    ],
+                    period: "正午 (12:00-13:00)"
+                },
+                "午后": {
+                    quotes: [
+                        "日晷指向新征程，消化完午餐更要消化梦想",
+                        "趴在桌上午睡片刻，连梦都带着阳光味道"
+                    ],
+                    period: "午后 (13:00-14:00)"
+                },
+                "下午1": {
+                    quotes: [
+                        "思维如午后蝉鸣般活跃，难题终将迎刃而解",
+                        "冰镇果汁碰杯的轻响，是给坚持者的喝彩"
+                    ],
+                    period: "下午 (14:00-15:00)"
+                },
+                "下午2": {
+                    quotes: [
+                        "西斜的日光把影子拉长，恰似你积累的厚度",
+                        "分享抽屉里的巧克力，甜蜜需要与人同尝"
+                    ],
+                    period: "下午 (15:00-16:00)"
+                },
+                "傍晚": {
+                    quotes: [
+                        "晚霞前的最后冲刺，给今日画上闪亮句点",
+                        "望向天边的云卷云舒，有些风景比目标珍贵"
+                    ],
+                    period: "傍晚 (16:00-17:00)"
+                },
+                "日落": {
+                    quotes: [
+                        "归途的脚步声里，藏着对家人未说的骄傲",
+                        "驻足欣赏火烧云吧，成功不必在今日定义"
+                    ],
+                    period: "日落 (17:00-18:00)"
+                },
+                "晚餐": {
+                    quotes: [
+                        "炊烟升起的地方，有等你讲述的今日篇章",
+                        "让电视剧配着晚饭，平凡夜晚也值得珍视"
+                    ],
+                    period: "晚餐 (18:00-19:00)"
+                },
+                "夜晚1": {
+                    quotes: [
+                        "台灯圈出的光晕里，正孕育着明天的可能性",
+                        "瘫在沙发刷手机，电子星空也能放松神经"
+                    ],
+                    period: "夜晚 (19:00-20:00)"
+                },
+                "夜晚2": {
+                    quotes: [
+                        "月光是最好的参谋，助你规划未来的蓝图",
+                        "泡沫剧里的无脑欢笑，是成年人的儿童时光"
+                    ],
+                    period: "夜晚 (20:00-21:00)"
+                },
+                "深夜1": {
+                    quotes: [
+                        "键盘敲击如夜曲，为理想谱写着新乐章",
+                        "泡脚时蒸腾的热气，带走白日所有疲惫"
+                    ],
+                    period: "深夜 (21:00-22:00)"
+                },
+                "午夜前": {
+                    quotes: [
+                        "黑暗中的屏幕微光，照亮不甘平庸的灵魂",
+                        "床头小说的奇幻世界，是给现实的温柔缓冲"
+                    ],
+                    period: "午夜前 (22:00-23:00)"
+                },
+                "午夜": {
+                    quotes: [
+                        "最后时刻的灵光乍现，往往改写人生剧本",
+                        "调暗灯光轻道晚安，充足的睡眠才是赢家"
+                    ],
+                    period: "午夜 (23:00-24:00)"
+                }
+            };
+            
+            // 时间区间对应的背景色
+            const timeColors = {
+                "深夜": "linear-gradient(135deg, #0f0c29, #302b63, #24243e)",
+                "凌晨": "linear-gradient(135deg, #1a2a6c, #2a3a7c, #1a2a6c)",
+                "破晓前": "linear-gradient(135deg, #2c3e50, #4ca1af, #2c3e50)",
+                "黎明前夕": "linear-gradient(135deg, #3a6186, #89253e, #3a6186)",
+                "拂晓": "linear-gradient(135deg, #ff7e5f, #feb47b, #ff7e5f)",
+                "日出": "linear-gradient(135deg, #ff9966, #ff5e62, #ff9966)",
+                "清晨": "linear-gradient(135deg, #56ab2f, #a8e063, #56ab2f)",
+                "早晨": "linear-gradient(135deg, #3a7bd5, #00d2ff, #3a7bd5)",
+                "上午1": "linear-gradient(135deg, #3494e6, #ec6ead, #3494e6)",
+                "上午2": "linear-gradient(135deg, #67b26f, #4ca2cd, #67b26f)",
+                "上午3": "linear-gradient(135deg, #5f2c82, #49a09d, #5f2c82)",
+                "午前": "linear-gradient(135deg, #ffd89b, #19547b, #ffd89b)",
+                "正午": "linear-gradient(135deg, #ff4e50, #f9d423, #ff4e50)",
+                "午后": "linear-gradient(135deg, #f6d365, #fda085, #f6d365)",
+                "下午1": "linear-gradient(135deg, #d1913c, #ffd194, #d1913c)",
+                "下午2": "linear-gradient(135deg, #ff8008, #ffc837, #ff8008)",
+                "傍晚": "linear-gradient(135deg, #ff5f6d, #ffc371, #ff5f6d)",
+                "日落": "linear-gradient(135deg, #f46b45, #eea849, #f46b45)",
+                "晚餐": "linear-gradient(135deg, #834d9b, #d04ed6, #834d9b)",
+                "夜晚1": "linear-gradient(135deg, #4776e6, #8e54e9, #4776e6)",
+                "夜晚2": "linear-gradient(135deg, #1a2980, #26d0ce, #1a2980)",
+                "深夜1": "linear-gradient(135deg, #232526, #414345, #232526)",
+                "午夜前": "linear-gradient(135deg, #000428, #004e92, #000428)",
+                "午夜": "linear-gradient(135deg, #0f0c29, #302b63, #24243e)"
+            };
+            
+            // 获取当前人生阶段
+            function getLifePeriod(hour) {
+                if (hour >= 0 && hour < 1) return "深夜";
+                if (hour >= 1 && hour < 2) return "凌晨";
+                if (hour >= 2 && hour < 3) return "破晓前";
+                if (hour >= 3 && hour < 4) return "黎明前夕";
+                if (hour >= 4 && hour < 5) return "拂晓";
+                if (hour >= 5 && hour < 6) return "日出";
+                if (hour >= 6 && hour < 7) return "清晨";
+                if (hour >= 7 && hour < 8) return "早晨";
+                if (hour >= 8 && hour < 9) return "上午1";
+                if (hour >= 9 && hour < 10) return "上午2";
+                if (hour >= 10 && hour < 11) return "上午3";
+                if (hour >= 11 && hour < 12) return "午前";
+                if (hour >= 12 && hour < 13) return "正午";
+                if (hour >= 13 && hour < 14) return "午后";
+                if (hour >= 14 && hour < 15) return "下午1";
+                if (hour >= 15 && hour < 16) return "下午2";
+                if (hour >= 16 && hour < 17) return "傍晚";
+                if (hour >= 17 && hour < 18) return "日落";
+                if (hour >= 18 && hour < 19) return "晚餐";
+                if (hour >= 19 && hour < 20) return "夜晚1";
+                if (hour >= 20 && hour < 21) return "夜晚2";
+                if (hour >= 21 && hour < 22) return "深夜1";
+                if (hour >= 22 && hour < 23) return "午夜前";
+                return "午夜";
+            }
+            
+            // 更新文案和背景色
+            function updateQuotesAndBackground(hour) {
+                const period = getLifePeriod(hour);
+                
+                // 淡出效果
+                quote1.style.opacity = 0;
+                quote2.style.opacity = 0;
+                timePeriod.style.opacity = 0;
+                
+                setTimeout(() => {
+                    quote1.textContent = lifeQuotes[period].quotes[0];
+                    quote2.textContent = lifeQuotes[period].quotes[1];
+                    timePeriod.textContent = lifeQuotes[period].period;
+                    
+                    // 淡入效果
+                    quote1.style.opacity = 1;
+                    quote2.style.opacity = 1;
+                    timePeriod.style.opacity = 1;
+                    
+                    // 更新背景色
+                    body.style.background = timeColors[period];
+                }, 300);
+            }
+            
+            // 格式化时间为两位数
+            function formatTime(num) {
+                return num < 10 ? '0' + num : num;
+            }
+            
+            // 格式化毫秒为三位数
+            function formatMilliseconds(num) {
+                return num < 10 ? '00' + num : (num < 100 ? '0' + num : num);
+            }
+            
+            // 更新电子时钟
+            function updateDigitalClock(lifeHours) {
+                const hours = Math.floor(lifeHours);
+                const minutes = Math.floor((lifeHours - hours) * 60);
+                const seconds = Math.floor((((lifeHours - hours) * 60 - minutes) * 60));
+                const milliseconds = Math.floor((((lifeHours - hours) * 60 - minutes) * 60 - seconds) * 1000);
+                const microseconds = Math.floor(((((lifeHours - hours) * 60 - minutes) * 60 - seconds) * 1000 - milliseconds) * 1000);
+                
+                digitalClock.textContent = `人生时钟：${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}.${formatMilliseconds(milliseconds)}.${formatMilliseconds(microseconds)}`;
+            }
+            
+            // 计算年龄（假设生日是当年6月1日）
+            function calculateAge(birthYear) {
+                const now = new Date();
+                const currentYear = now.getFullYear();
+                const birthdayThisYear = new Date(currentYear, 5, 1); // 6月1日
+                
+                let age = currentYear - birthYear;
+                
+                // 如果当前日期在生日之前，年龄减1
+                if (now < birthdayThisYear) {
+                    age--;
+                }
+                
+                // 计算从今年生日到现在的天数比例
+                const startDate = new Date(currentYear - 1, 5, 1); // 去年生日
+                const endDate = new Date(currentYear, 5, 1); // 今年生日
+                const daysInYear = (endDate - startDate) / (1000 * 60 * 60 * 24);
+                const daysSinceBirthday = (now - birthdayThisYear) / (1000 * 60 * 60 * 24);
+                
+                // 计算精确年龄（年 + 天数比例）
+                const exactAge = age + Math.max(0, daysSinceBirthday / daysInYear);
+                
+                return exactAge;
+            }
+            
+            // 更新时钟
+            function updateClock(birthYear) {
+                const exactAge = calculateAge(birthYear);
+                
+                // 假设人生80年对应24小时
+                const lifeHours = (exactAge / 80) * 24;
+                const hours = Math.floor(lifeHours);
+                const minutes = Math.floor((lifeHours - hours) * 60);
+                const seconds = Math.floor((((lifeHours - hours) * 60 - minutes) * 60));
+                const milliseconds = Math.floor((((lifeHours - hours) * 60 - minutes) * 60 - seconds) * 1000);
+                
+                // 计算指针角度
+                const hourDeg = (hours % 12) * 30 + minutes * 0.5;
+                const minuteDeg = minutes * 6 + seconds * 0.1;
+                
+                // 应用旋转
+                hourHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+                minuteHand.style.transform = `translateX(-50%) rotate(${minuteDeg}deg)`;
+                
+                // 更新电子时钟
+                updateDigitalClock(lifeHours);
+                
+                // 更新文案和背景
+                updateQuotesAndBackground(lifeHours);
+            }
+            
+            // 缓慢移动时钟指针
+            function startClockAnimation(birthYear) {
+                // 清除之前的定时器
+                if (window.clockInterval) {
+                    clearInterval(window.clockInterval);
+                }
+                
+                // 设置新定时器（每毫秒更新一次以实现毫秒级变化）
+                window.clockInterval = setInterval(() => {
+                    updateClock(birthYear);
+                }, 1);
+                
+                // 初始更新
+                updateClock(birthYear);
+            }
+            
+            // 按钮点击事件
+            calculateBtn.addEventListener('click', function() {
+                const birthYear = parseInt(birthYearInput.value);
+                const currentYear = new Date().getFullYear();
+                if (isNaN(birthYear) || birthYear < 1900 || birthYear > currentYear) {
+                    alert(`请输入有效的出生年份（1900-${currentYear}）`);
+                    return;
+                }
+                
+                // 更新年份标记
+                setYearMarkers(birthYear);
+                
+                // 开始时钟动画
+                startClockAnimation(birthYear);
+                
+                // 显示文案
+                quote1.style.animation = "fadeIn 1.5s forwards";
+                quote2.style.animation = "fadeIn 1.5s forwards";
+                timePeriod.style.animation = "fadeIn 1.5s forwards";
+            });
+            
+            // 初始状态：不显示文案和年份标记
+            quote1.style.opacity = 0;
+            quote2.style.opacity = 0;
+            timePeriod.style.opacity = 0;
+            yearMarkers.forEach(marker => {
+                marker.style.opacity = 0;
+            });
+            
+            // 初始时钟位置（0点0分）
+            hourHand.style.transform = `translateX(-50%) rotate(0deg)`;
+            minuteHand.style.transform = `translateX(-50%) rotate(0deg)`;
+        });
+    </script>
+</body>
+</html>
