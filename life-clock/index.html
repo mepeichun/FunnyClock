@@ -732,8 +732,12 @@
             calculateBtn.addEventListener('click', function () {
                 const birthYear = parseInt(birthYearInput.value);
                 const currentYear = new Date().getFullYear();
-                if (isNaN(birthYear) || birthYear < 1900 || birthYear > currentYear) {
-                    alert(`请输入有效的出生年份（1900-${currentYear}）`);
+                if (isNaN(birthYear) || birthYear < 1900) {
+                    alert(`不用算了，可以放进博物馆了`);
+                    return;
+                }
+                if (isNaN(birthYear) || birthYear > currentYear) {
+                    alert(`时空穿越者无法使用本工具`);
                     return;
                 }
 
